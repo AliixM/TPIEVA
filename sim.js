@@ -82,7 +82,17 @@ Sim.prototype.actualiser = function(dt){
 	// Boucle ACTION
 	// =============
 
+	//Actualisation des composants des acteurs
 	var n = this.acteurs.length ; 
+	
+	for(var i=0; i<n; i++){
+		var nc = this.acteurs[i].composants.length ; 
+		for(var j=0; j<nc; j++){
+			this.acteurs[i].composants[j].actualiser(dt) ; 
+		} ;
+	} ;
+
+	//Actualisation des acteurs
 	for(var i=0; i<n; i++){
 		this.acteurs[i].actualiser(dt) ; 
 	} ;
@@ -98,10 +108,23 @@ Sim.prototype.addActeur = function(act){
 
 // ===============================================================================================
 
+function Composant(entite) {
+	this.entite = entite;
+}
+
+Composant.prototype.actualiser = function(dt) {}
+
+// ===============================================================================================
+
 function Acteur(nom,data,sim){
 	this.nom = nom ; 
 	this.objet3d = null ; 
 	this.sim = sim ; 
+	this.mass = 1.0;
+	this.vitesse = new THREE.Vector3();
+	this.acceleration = new THREE.Vector3();
+	this.composants = [];
+
 }
 
 // Affectation d'une incarnation à un acteur
@@ -117,6 +140,13 @@ Acteur.prototype.setPosition = function(x,y,z){
 	}
 }
 
+// Recuperation de la position de l'acteur
+Acteur.prototype.getPosition = function(){
+	if(this.objet3d){
+		return this.objet3d.position.clone() ; 
+	}
+}
+
 // Modification de l'orientation de l'acteur
 Acteur.prototype.setOrientation = function(cap){
 	if(this.objet3d){
@@ -124,11 +154,20 @@ Acteur.prototype.setOrientation = function(cap){
 	}
 }
 
+
 // Modification de la visibilité de l'acteur
 Acteur.prototype.setVisible = function(v){
 	if(this.objet3d){
 		this.objet3d.isVisible = v ;
 	}
+}
+
+Acteur.prototype.appliquerForce = function(f) {
+	this.acceleration.addScaledVector(f,1.0/this.mass);
+}
+
+Acteur.prototype.ajouterComposant = function(comp) {
+	this.composants.push(comp);
 }
 
 
