@@ -98,7 +98,7 @@ Acteur2.prototype.actualiser = function(dt){
     var t = this.sim.horloge ; 
 
     //Mise a jour régulière du déplacement du pinguin
-    if((t1000)%5000>0 & (t1000)%5000<20) {
+    if((t*1000)%5000>0 & (t*1000)%5000<20) {
         var x=getRandomInt(100)-50;
         var z=getRandomInt(100)-50;
         new THREE.Vector3(x,0,z);
