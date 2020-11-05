@@ -77,7 +77,7 @@ function Acteur2(nom, data, sim){
 Acteur2.prototype = Object.create(Acteur.prototype) ; 
 Acteur2.prototype.constructor = Acteur2 ; 
 
-Acteur2.prototype.actualiser = function(dt){
+/*Acteur2.prototype.actualiser = function(dt){
 	console.log(this.sim.horloge);
 	var t = this.sim.horloge; 
 
@@ -92,6 +92,39 @@ Acteur2.prototype.actualiser = function(dt){
 		this.position.addScaledVector(this.speed, 1);
 		this.object3D.position.addScaledVector(this.speed, 1) ; 
 	}
+}*/
+Acteur2.prototype.actualiser = function(dt){
+    //console.log(this.sim.horloge) ; 
+    var t = this.sim.horloge ; 
+
+    //Mise a jour régulière du déplacement du pinguin
+    if((t1000)%5000>0 & (t1000)%5000<20) {
+        var x=getRandomInt(100)-50;
+        var z=getRandomInt(100)-50;
+        new THREE.Vector3(x,0,z);
+        this.objet3d.lookAt(new THREE.Vector3(x,0,z));
+        this.vitesse=new THREE.Vector3();
+    }
+    //Ajout de l'accélération dans la bonne direction
+    var acc=new THREE.Vector3(0,0,0.5);
+    acc.applyQuaternion(this.objet3d.quaternion);
+
+    //Ajout d'une accélération nouvelle
+    this.appliquerForce(acc);
+
+    //Actualisation de la position, de la vitesse et remise à 0 de l'accélération
+    this.objet3d.position.addScaledVector(this.vitesse,dt) ;
+
+
+    //Verification des bords de la map
+    if(this.objet3d.position.x>50.0) this.objet3d.position.x=50.0;
+    if(this.objet3d.position.z>50.0) this.objet3d.position.z=50.0;
+    if(this.objet3d.position.x<-50.0) this.objet3d.position.x=-50.0;
+    if(this.objet3d.position.z<-50.0) this.objet3d.position.z=-50.0;
+
+
+    this.vitesse.addScaledVector(this.acceleration,dt) ;
+    this.acceleration.set(0.0,0.0,0.0) ;
 }
 // La classe décrivant les touffes d'herbe
 // =======================================
