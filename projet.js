@@ -126,6 +126,10 @@ Acteur2.prototype.actualiser = function(dt){
     this.vitesse.addScaledVector(this.acceleration,dt) ;
     this.acceleration.set(0.0,0.0,0.0) ;
 }
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 // La classe décrivant les touffes d'herbe
 // =======================================
 
